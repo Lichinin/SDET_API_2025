@@ -17,8 +17,10 @@ class TestApi:
         api_client.get_entity_list()
         api_client.assert_get_entity_list_response()
 
-    def test_create_entity(self):
-        pass
+    def test_create_entity(self, entity_data, logger):
+        api_client = ApiClient('http://localhost:8080', logger=logger)
+        api_client.create_entity(entity_data)
+        api_client.assert_create_entity_response()
 
     def test_edit_entity(self):
         pass

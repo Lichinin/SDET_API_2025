@@ -1,6 +1,6 @@
 from typing import List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
 
 
 class AdditionModel(BaseModel):
@@ -19,3 +19,7 @@ class EntityModel(BaseModel):
 
 class EntityListModel(BaseModel):
     entity: List[EntityModel]
+
+
+class EntityCreateModel(RootModel):
+    root: int

@@ -5,6 +5,9 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 import pytest
+from faker import Faker
+
+fake = Faker()
 
 
 def pytest_addoption(parser):
@@ -39,3 +42,20 @@ def logger(request):
     for handler in logger.handlers:
         handler.close()
     logger.handlers.clear()
+
+
+@pytest.fixture
+def entity_data():
+    return {
+        "addition": {
+            "additional_info": fake.sentence(),
+            "additional_number": fake.random_int(min=1, max=99)
+        },
+        "important_numbers": [
+            fake.random_int(min=1, max=99),
+            fake.random_int(min=1, max=99),
+            fake.random_int(min=1, max=99)
+        ],
+        "title": fake.text(max_nb_chars=15),
+        "verified": fake.boolean()
+    }

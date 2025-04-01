@@ -1,6 +1,7 @@
 import allure
 import requests
-from schemas.schemas import EntityModel, EntityListModel
+
+from schemas.schemas import EntityListModel, EntityModel, EntityCreateModel
 
 
 class ApiClient:
@@ -44,6 +45,34 @@ class ApiClient:
                 f'(status code = {response.status_code})'
             )
 
+    @allure.step('Проверка создания объявления')
+    def create_entity(self, entity_data):
+        url = self.base_url + '/api/create'
+        headers = {
+            "Content-Type": "application/json"
+        }
+        try:
+            self.logger.info('* Try to create product')
+            response = requests.post(
+                url,
+                headers=headers,
+                json=entity_data
+            )
+            response.raise_for_status()
+            self.data = response.json()
+        except requests.exceptions.RequestException:
+            self.logging.error(
+                f'Failed create product'
+                f'(status code = {response.status_code})'
+            )
+            raise Exception(
+                f'Failed create product'
+                f'(status code = {response.status_code})'
+            )
+
+
+
+
     @allure.step('Проверка ответа get-запроса сущности')
     def assert_get_entity_response(self):
         self.logger.info('* Check response scheme')
@@ -61,6 +90,18 @@ class ApiClient:
         self.logger.info('* Check response scheme')
         try:
             EntityListModel(**self.data)
+            self.logger.info(self.data)
+        except Exception as e:
+            error_msg = f"Validation error: {str(e)}"
+            self.logger.error(error_msg)
+            raise AssertionError(error_msg)
+        self.logger.info(self.data)
+
+    @allure.step('Проверка ответа post-запроса создания сущности')
+    def assert_create_entity_response(self):
+        self.logger.info('* Check response scheme')
+        try:
+            EntityCreateModel(self.data)
             self.logger.info(self.data)
         except Exception as e:
             error_msg = f"Validation error: {str(e)}"
