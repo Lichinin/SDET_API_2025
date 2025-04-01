@@ -7,17 +7,13 @@ from pathlib import Path
 import pytest
 from faker import Faker
 
-fake = Faker()
-
 from api_client.api_client import ApiClient
+
+fake = Faker()
 
 
 def pytest_addoption(parser):
-    parser.addoption('--browser', action='store', default='firefox')
-    parser.addoption('--url', action='store', default='http://tech-avito-intern.jumpingcrab.com')
     parser.addoption('--log_level', action='store', default="INFO")
-    parser.addoption('--executor', action='store')
-    parser.addoption('--browser_version', action='store')
 
 
 @pytest.fixture(scope='function')
@@ -62,9 +58,9 @@ def entity_data():
         "verified": fake.boolean()
     }
 
+
 @pytest.fixture
 def created_entity_id(entity_data, logger):
-    api_client = ApiClient('http://localhost:8080', logger=logger)
+    api_client = ApiClient(logger=logger)
     api_client.create_entity(entity_data)
     return api_client.data
-

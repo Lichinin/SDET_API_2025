@@ -1,53 +1,53 @@
 import allure
 import requests
 
+from config import APiRoutes
 from schemas.schemas import EntityCreateModel, EntityListModel, EntityModel
 
 
 class ApiClient:
-    def __init__(self, base_url, logger):
-        self.base_url = base_url
+    def __init__(self, logger):
         self.logger = logger
 
     @allure.step('Получение сущности по id')
     def get_entity_by_id(self, id):
-        url = self.base_url + f'/api/get/{id}'
+        url = APiRoutes.entity_by_id_url(id)
         try:
-            self.logger.info('* Try to get element by id')
+            self.logger.info('* Try to get entity by id')
             response = requests.get(url)
             response.raise_for_status()
             self.data = response.json()
         except requests.exceptions.RequestException:
             self.logging.error(
-                f'Failed get product by id'
+                f'Failed get entity by id'
                 f'(status code = {response.status_code})'
             )
             raise Exception(
-                f'Failed get product by id'
+                f'Failed get entity by id'
                 f'(status code = {response.status_code})'
             )
 
-    @allure.step('Получение сущности по id')
+    @allure.step('Получение всех сущностей по id')
     def get_entity_list(self):
-        url = self.base_url + '/api/getAll'
+        url = APiRoutes.entity_list_url()
         try:
-            self.logger.info('* Try to get element by id')
+            self.logger.info('* Try to get entities list')
             response = requests.get(url)
             response.raise_for_status()
             self.data = response.json()
         except requests.exceptions.RequestException:
             self.logging.error(
-                f'Failed get product by id'
+                f'Failed get entities list'
                 f'(status code = {response.status_code})'
             )
             raise Exception(
-                f'Failed get product by id'
+                f'Failed get entities list'
                 f'(status code = {response.status_code})'
             )
 
     @allure.step('Проверка создания сущности')
     def create_entity(self, entity_data):
-        url = self.base_url + '/api/create'
+        url = APiRoutes.create_entity_url()
         headers = {
             "Content-Type": "application/json"
         }
@@ -62,23 +62,23 @@ class ApiClient:
             self.data = response.json()
         except requests.exceptions.RequestException:
             self.logging.error(
-                f'Failed create product'
+                f'Failed create entity'
                 f'(status code = {response.status_code})'
             )
             raise Exception(
-                f'Failed create product'
+                f'Failed create entity'
                 f'(status code = {response.status_code})'
             )
 
     @allure.step('Проверка редактирования сущности')
     def patch_entity(self, entity_data, entity_id):
-        url = self.base_url + f'/api/patch/{entity_id}'
+        url = APiRoutes.patch_entity_url(entity_id)
         headers = {
             "Content-Type": "application/json"
         }
         entity_data['title'] = f'EDITED_{entity_data["title"]}'
         try:
-            self.logger.info('* Try to create entity')
+            self.logger.info('* Try to path entity')
             response = requests.patch(
                 url,
                 headers=headers,
@@ -95,10 +95,9 @@ class ApiClient:
                 f'(status code = {response.status_code})'
             )
 
-
     @allure.step('Проверка удаления сущности')
     def delete_entity(self, entity_id):
-        url = self.base_url + f'/api/delete/{entity_id}'
+        url = APiRoutes.delete_entity_url(entity_id)
         headers = {
             "Content-Type": "text/plain"
         }
@@ -119,9 +118,7 @@ class ApiClient:
                 f'(status code = {response.status_code})'
             )
 
-
-
-    @allure.step('Проверка ответа get-запроса сущности')
+    @allure.step('Валидация ответа get-запроса сущности')
     def assert_get_entity_response(self):
         self.logger.info('* Check response scheme')
         try:
@@ -133,7 +130,7 @@ class ApiClient:
             raise AssertionError(error_msg)
         self.logger.info(self.data)
 
-    @allure.step('Проверка ответа get-запроса получения всех сущностей')
+    @allure.step('Валидация ответа get-запроса получения всех сущностей')
     def assert_get_entity_list_response(self):
         self.logger.info('* Check response scheme')
         try:
@@ -145,7 +142,7 @@ class ApiClient:
             raise AssertionError(error_msg)
         self.logger.info(self.data)
 
-    @allure.step('Проверка ответа post-запроса создания сущности')
+    @allure.step('Валидация ответа post-запроса создания сущности')
     def assert_create_entity_response(self):
         self.logger.info('* Check response scheme')
         try:
