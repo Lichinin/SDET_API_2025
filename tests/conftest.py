@@ -9,6 +9,8 @@ from faker import Faker
 
 fake = Faker()
 
+from api_client.api_client import ApiClient
+
 
 def pytest_addoption(parser):
     parser.addoption('--browser', action='store', default='firefox')
@@ -59,3 +61,9 @@ def entity_data():
         "title": fake.text(max_nb_chars=15),
         "verified": fake.boolean()
     }
+
+@pytest.fixture
+def created_entity_id(entity_data, logger):
+    api_client = ApiClient('http://localhost:8080', logger=logger)
+    api_client.create_entity(entity_data)
+    return api_client.data

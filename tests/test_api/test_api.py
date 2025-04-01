@@ -25,5 +25,7 @@ class TestApi:
     def test_edit_entity(self):
         pass
 
-    def test_delete_entity(self):
-        pass
+    def test_delete_entity(self, created_entity_id, logger):
+        api_client = ApiClient('http://localhost:8080', logger=logger)
+        api_client.delete_entity(created_entity_id)
+        api_client.assert_delete_entity(created_entity_id)

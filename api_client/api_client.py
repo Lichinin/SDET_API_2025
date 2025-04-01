@@ -1,7 +1,7 @@
 import allure
 import requests
 
-from schemas.schemas import EntityListModel, EntityModel, EntityCreateModel
+from schemas.schemas import EntityCreateModel, EntityListModel, EntityModel
 
 
 class ApiClient:
@@ -45,14 +45,14 @@ class ApiClient:
                 f'(status code = {response.status_code})'
             )
 
-    @allure.step('Проверка создания объявления')
+    @allure.step('Проверка создания сущности')
     def create_entity(self, entity_data):
         url = self.base_url + '/api/create'
         headers = {
             "Content-Type": "application/json"
         }
         try:
-            self.logger.info('* Try to create product')
+            self.logger.info('* Try to create entity')
             response = requests.post(
                 url,
                 headers=headers,
@@ -70,6 +70,28 @@ class ApiClient:
                 f'(status code = {response.status_code})'
             )
 
+    @allure.step('Проверка удаления сущности')
+    def delete_entity(self, entity_id):
+        url = self.base_url + f'/api/delete/{entity_id}'
+        headers = {
+            "Content-Type": "text/plain"
+        }
+        try:
+            self.logger.info('* Try to delete entity by id')
+            response = requests.delete(
+                url,
+                headers=headers
+            )
+            response.raise_for_status()
+        except requests.exceptions.RequestException:
+            self.logging.error(
+                f'Failed delete entity by id'
+                f'(status code = {response.status_code})'
+            )
+            raise Exception(
+                f'Failed delete entity by id'
+                f'(status code = {response.status_code})'
+            )
 
 
 
@@ -108,3 +130,9 @@ class ApiClient:
             self.logger.error(error_msg)
             raise AssertionError(error_msg)
         self.logger.info(self.data)
+
+    @allure.step('Проверка отсутствия удаленной сущности в БД')
+    def assert_delete_entity(self, entity_id):
+        self.get_entity_list()
+        entities_id = [item["id"] for item in self.data["entity"]]
+        assert entity_id not in entities_id
