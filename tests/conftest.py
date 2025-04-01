@@ -2,8 +2,7 @@ import datetime
 import logging
 import logging.handlers
 from logging.handlers import RotatingFileHandler
-from pathlib import Path
-
+from config import Pathes
 import pytest
 from faker import Faker
 
@@ -18,7 +17,7 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope='function')
 def logger(request):
-    log_dir = Path(__file__).parent.parent / 'log'
+    log_dir = Pathes.LOG_DIR
     log_dir.mkdir(exist_ok=True)
     log_level = request.config.getoption('--log_level')
     logger = logging.getLogger(request.node.name)
