@@ -17,7 +17,7 @@ class ApiClient:
             response.raise_for_status()
             self.response_data = response.json()
         except requests.exceptions.RequestException:
-            self.logging.error(
+            self.logger.error(
                 f'Failed get entity by id'
                 f'(status code = {response.status_code})'
             )
