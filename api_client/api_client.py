@@ -70,6 +70,32 @@ class ApiClient:
                 f'(status code = {response.status_code})'
             )
 
+    @allure.step('Проверка редактирования сущности')
+    def patch_entity(self, entity_data, entity_id):
+        url = self.base_url + f'/api/patch/{entity_id}'
+        headers = {
+            "Content-Type": "application/json"
+        }
+        entity_data['title'] = f'EDITED_{entity_data["title"]}'
+        try:
+            self.logger.info('* Try to create entity')
+            response = requests.patch(
+                url,
+                headers=headers,
+                json=entity_data
+            )
+            response.raise_for_status()
+        except requests.exceptions.RequestException:
+            self.logging.error(
+                f'Failed patch entity'
+                f'(status code = {response.status_code})'
+            )
+            raise Exception(
+                f'Failed patch entity'
+                f'(status code = {response.status_code})'
+            )
+
+
     @allure.step('Проверка удаления сущности')
     def delete_entity(self, entity_id):
         url = self.base_url + f'/api/delete/{entity_id}'
@@ -136,3 +162,8 @@ class ApiClient:
         self.get_entity_list()
         entities_id = [item["id"] for item in self.data["entity"]]
         assert entity_id not in entities_id
+
+    @allure.step('Проверка изменения title сущности')
+    def assert_patch_entity_title(self, entity_id):
+        self.get_entity_by_id(entity_id)
+        assert self.data['title'].startswith('EDITED_')
