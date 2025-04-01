@@ -42,7 +42,7 @@ def logger(request):
 
 
 @pytest.fixture
-def entity_data():
+def entity_setup_data():
     return {
         "addition": {
             "additional_info": fake.sentence(),
@@ -59,7 +59,18 @@ def entity_data():
 
 
 @pytest.fixture
-def created_entity_id(entity_data, logger):
+def created_entity_id(entity_setup_data, logger):
     api_client = ApiClient(logger=logger)
-    api_client.create_entity(entity_data)
-    return api_client.data
+    api_client.create_entity(entity_setup_data)
+    return api_client.response_data
+
+
+@pytest.fixture
+def teardown_entity(logger):
+    entity_holder = {'id': None}
+
+    yield entity_holder
+
+    if entity_holder['id'] is not None:
+        api_client = ApiClient(logger=logger)
+        api_client.delete_entity(entity_holder['id'])

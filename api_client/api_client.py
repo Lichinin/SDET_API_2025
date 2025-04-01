@@ -118,26 +118,17 @@ class ApiClient:
                 f'(status code = {response.status_code})'
             )
 
+    @allure.step('Получение списка id всех сущностей')
+    def get_entities_id_list(self):
+        self.get_entity_list()
+        return [item["id"] for item in self.response_data["entity"]]
 
-    @allure.step('Валидация ответа post-запроса создания сущности')
-    def assert_create_entity_response(self):
-        self.logger.info('* Check response scheme')
-        try:
-            EntityCreateModel(self.data)
-            self.logger.info(self.data)
-        except Exception as e:
-            error_msg = f"Validation error: {str(e)}"
-            self.logger.error(error_msg)
-            raise AssertionError(error_msg)
-        self.logger.info(self.data)
 
     @allure.step('Проверка отсутствия удаленной сущности в БД')
     def assert_delete_entity(self, entity_id):
-        self.get_entity_list()
-        entities_id = [item["id"] for item in self.data["entity"]]
-        assert entity_id not in entities_id
+        assert entity_id not in self.get_entities_id_list()
 
     @allure.step('Проверка изменения title сущности')
     def assert_patch_entity_title(self, entity_id):
         self.get_entity_by_id(entity_id)
-        assert self.data['title'].startswith('EDITED_')
+        assert self.response_data['title'].startswith('EDITED_')

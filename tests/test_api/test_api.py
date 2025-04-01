@@ -27,21 +27,39 @@ class TestApi:
             api_client.logger
         )
 
-    def test_create_entity(self, entity_data, logger):
+    def test_create_entity(
+        self,
+        entity_setup_data,
+        logger,
+        teardown_entity
+    ):
         api_client = ApiClient(logger=logger)
-        api_client.create_entity(entity_data)
-        ValidationHelper.assert_create_entity_response(
+        api_client.create_entity(entity_setup_data)
+        teardown_entity['id'] = api_client.response_data
+        ValidationHelper.validate_response_schema(
             EntityCreateModel,
             api_client.response_data,
             api_client.logger
         )
+        assert api_client.response_data in api_client.get_entities_id_list()
 
-    def test_edit_entity(self, entity_data, created_entity_id, logger):
+    def test_edit_entity(
+        self,
+        entity_setup_data,
+        created_entity_id,
+        teardown_entity,
+        logger
+    ):
         api_client = ApiClient(logger=logger)
-        api_client.patch_entity(entity_data, created_entity_id)
+        api_client.patch_entity(entity_setup_data, created_entity_id)
+        teardown_entity['id'] = created_entity_id
         api_client.assert_patch_entity_title(created_entity_id)
 
-    def test_delete_entity(self, created_entity_id, logger):
+    def test_delete_entity(
+        self,
+        created_entity_id,
+        logger
+    ):
         api_client = ApiClient(logger=logger)
         api_client.delete_entity(created_entity_id)
         api_client.assert_delete_entity(created_entity_id)
