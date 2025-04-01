@@ -16,6 +16,24 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Checkout server code
+      uses: actions/checkout@v4
+      with:
+        repository: Lichinin/simbirsoft_sdet_project_api_server
+        path: server 
+
+    - name: Start server with Docker Compose
+      run: |
+        cd server  # Переходим в папку с сервером
+        docker-compose up -d
+        sleep 10  # Ждём запуска (лучше заменить на healthcheck)
+
+    - name: Wait for server
+      run: |
+        until curl -s http://localhost:8080/health; do
+          sleep 1
+        done
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
