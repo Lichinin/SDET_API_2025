@@ -1,7 +1,7 @@
 import allure
 
 from api_client.api_client import ApiClient
-from helpers.api_helpers import ValidationHelper
+from helpers.api_helpers import ValidationHelper, AssertionHelper
 from schemas.schemas import EntityModel, EntityListModel, EntityCreateModel
 
 
@@ -53,7 +53,10 @@ class TestApi:
         api_client = ApiClient(logger=logger)
         api_client.patch_entity(entity_setup_data, created_entity_id)
         teardown_entity['id'] = created_entity_id
-        api_client.assert_patch_entity_title(created_entity_id)
+        AssertionHelper.check_patched_entity_title(
+            created_entity_id,
+            api_client.logger
+        )
 
     def test_delete_entity(
         self,
@@ -62,4 +65,7 @@ class TestApi:
     ):
         api_client = ApiClient(logger=logger)
         api_client.delete_entity(created_entity_id)
-        api_client.assert_delete_entity(created_entity_id)
+        AssertionHelper.check_delited_entity(
+            created_entity_id,
+            api_client.get_entities_id_list()
+        )

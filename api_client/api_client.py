@@ -2,7 +2,6 @@ import allure
 import requests
 
 from config import APiRoutes
-from schemas.schemas import EntityCreateModel, EntityListModel, EntityModel
 
 
 class ApiClient:
@@ -122,13 +121,3 @@ class ApiClient:
     def get_entities_id_list(self):
         self.get_entity_list()
         return [item["id"] for item in self.response_data["entity"]]
-
-
-    @allure.step('Проверка отсутствия удаленной сущности в БД')
-    def assert_delete_entity(self, entity_id):
-        assert entity_id not in self.get_entities_id_list()
-
-    @allure.step('Проверка изменения title сущности')
-    def assert_patch_entity_title(self, entity_id):
-        self.get_entity_by_id(entity_id)
-        assert self.response_data['title'].startswith('EDITED_')
