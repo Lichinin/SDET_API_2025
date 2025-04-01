@@ -8,7 +8,7 @@ class ApiClient:
     def __init__(self, logger):
         self.logger = logger
 
-    @allure.step('Получение сущности по id')
+    @allure.step('Получить сущность по ID')
     def get_entity_by_id(self, id):
         url = APiRoutes.entity_by_id_url(id)
         try:
@@ -26,7 +26,7 @@ class ApiClient:
                 f'(status code = {response.status_code})'
             )
 
-    @allure.step('Получение всех сущностей по id')
+    @allure.step('Получить список всех сущностей')
     def get_entity_list(self):
         url = APiRoutes.entity_list_url()
         try:
@@ -44,7 +44,7 @@ class ApiClient:
                 f'(status code = {response.status_code})'
             )
 
-    @allure.step('Проверка создания сущности')
+    @allure.step('Создать новую сущность')
     def create_entity(self, entity_data):
         url = APiRoutes.create_entity_url()
         headers = {
@@ -69,7 +69,7 @@ class ApiClient:
                 f'(status code = {response.status_code})'
             )
 
-    @allure.step('Проверка редактирования сущности')
+    @allure.step('Редактировать сущность по ID')
     def patch_entity(self, entity_data, entity_id):
         url = APiRoutes.patch_entity_url(entity_id)
         headers = {
@@ -94,7 +94,7 @@ class ApiClient:
                 f'(status code = {response.status_code})'
             )
 
-    @allure.step('Проверка удаления сущности')
+    @allure.step('Удалить сущность по ID')
     def delete_entity(self, entity_id):
         url = APiRoutes.delete_entity_url(entity_id)
         headers = {
@@ -117,7 +117,7 @@ class ApiClient:
                 f'(status code = {response.status_code})'
             )
 
-    @allure.step('Получение списка id всех сущностей')
+    @allure.step('Получить список ID всех сущностей')
     def get_entities_id_list(self):
         self.get_entity_list()
         return [item["id"] for item in self.response_data["entity"]]

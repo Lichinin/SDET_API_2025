@@ -9,6 +9,8 @@ from schemas.schemas import EntityModel, EntityListModel, EntityCreateModel
 @allure.suite('API tests')
 class TestApi:
 
+    @allure.story('Получение сущности')
+    @allure.title('Проверка получения сущности по ID')
     def test_get_entity(self, logger):
         api_client = ApiClient(logger=logger)
         api_client.get_entity_by_id('1')
@@ -18,6 +20,8 @@ class TestApi:
             api_client.logger
         )
 
+    @allure.story('Получение списка сущностей')
+    @allure.title('Проверка получения списка сущностей')
     def test_get_entity_list(self, logger):
         api_client = ApiClient(logger=logger)
         api_client.get_entity_list()
@@ -27,6 +31,8 @@ class TestApi:
             api_client.logger
         )
 
+    @allure.story('Создание сущности')
+    @allure.title('Проверка создания новой сущности')
     def test_create_entity(
         self,
         entity_setup_data,
@@ -43,6 +49,8 @@ class TestApi:
         )
         assert api_client.response_data in api_client.get_entities_id_list()
 
+    @allure.story('Редактирование сущности')
+    @allure.title('Проверка редактирования сущности')
     def test_edit_entity(
         self,
         entity_setup_data,
@@ -58,6 +66,8 @@ class TestApi:
             api_client.logger
         )
 
+    @allure.story('Удаление сущности')
+    @allure.title('Проверка удаления сущности')
     def test_delete_entity(
         self,
         created_entity_id,
