@@ -44,7 +44,7 @@ def logger(request):
 @pytest.fixture
 def created_entity_id(logger):
     api_client = ApiClient(logger=logger)
-    api_client.create_entity(DataHelper.entity_setup_data)
+    api_client.create_entity(DataHelper.entity_setup_data())
     return api_client.response_data
 
 
