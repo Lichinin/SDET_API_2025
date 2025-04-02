@@ -22,7 +22,7 @@ class TestApi:
             api_client.logger
         )
 
-    @pytest.mark.parametrize("setup_and_teardown_entities", [3], indirect=True)
+    @pytest.mark.parametrize("setup_and_teardown_entity", [3], indirect=True)
     @allure.story('Получение списка сущностей')
     @allure.title('Проверка получения списка сущностей')
     def test_get_entity_list(self, setup_and_teardown_entity, logger):

@@ -66,7 +66,7 @@ def setup_and_teardown_entity(logger, request):
     num_entities = request.param if hasattr(request, "param") else 1
     for _ in range(num_entities):
         api_client.create_entity(DataHelper.entity_setup_data())
-        entity_id = api_client.response_data
+        entities_id.append(api_client.response_data)
 
     yield entities_id
 
