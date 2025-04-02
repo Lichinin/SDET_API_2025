@@ -2,6 +2,7 @@ import allure
 
 from api_client.api_client import ApiClient
 from helpers.api_helpers import ValidationHelper, AssertionHelper
+from helpers.data_helpers import DataHelper
 from schemas.schemas import EntityModel, EntityListModel, EntityCreateModel
 
 
@@ -36,12 +37,11 @@ class TestApi:
     @allure.title('Проверка создания новой сущности')
     def test_create_entity(
         self,
-        entity_setup_data,
         logger,
         teardown_entity
     ):
         api_client = ApiClient(logger=logger)
-        api_client.create_entity(entity_setup_data)
+        api_client.create_entity(DataHelper.entity_setup_data)
         teardown_entity['id'] = api_client.response_data
         ValidationHelper.validate_response_schema(
             EntityCreateModel,
@@ -54,13 +54,12 @@ class TestApi:
     @allure.title('Проверка редактирования сущности')
     def test_edit_entity(
         self,
-        entity_setup_data,
         created_entity_id,
         teardown_entity,
         logger
     ):
         api_client = ApiClient(logger=logger)
-        api_client.patch_entity(entity_setup_data, created_entity_id)
+        api_client.patch_entity(DataHelper.entity_setup_data, created_entity_id)
         teardown_entity['id'] = created_entity_id
         AssertionHelper.check_patched_entity_title(
             created_entity_id,

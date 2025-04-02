@@ -7,6 +7,7 @@ import pytest
 from faker import Faker
 
 from api_client.api_client import ApiClient
+from helpers.data_helpers import DataHelper
 
 fake = Faker()
 
@@ -41,26 +42,9 @@ def logger(request):
 
 
 @pytest.fixture
-def entity_setup_data():
-    return {
-        "addition": {
-            "additional_info": fake.sentence(),
-            "additional_number": fake.random_int(min=1, max=99)
-        },
-        "important_numbers": [
-            fake.random_int(min=1, max=99),
-            fake.random_int(min=1, max=99),
-            fake.random_int(min=1, max=99)
-        ],
-        "title": fake.text(max_nb_chars=15),
-        "verified": fake.boolean()
-    }
-
-
-@pytest.fixture
-def created_entity_id(entity_setup_data, logger):
+def created_entity_id(logger):
     api_client = ApiClient(logger=logger)
-    api_client.create_entity(entity_setup_data)
+    api_client.create_entity(DataHelper.entity_setup_data)
     return api_client.response_data
 
 
