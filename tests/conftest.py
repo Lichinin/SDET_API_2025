@@ -68,7 +68,7 @@ def setup_and_teardown_entity(logger, request):
         api_client.create_entity(DataHelper.entity_setup_data())
         entities_id.append(api_client.response_data)
 
-    yield entities_id
+    yield entities_id[0] if num_entities == 1 else entities_id
 
     for entity_id in entities_id:
         api_client.delete_entity(entity_id)
