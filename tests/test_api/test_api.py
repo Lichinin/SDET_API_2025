@@ -53,15 +53,16 @@ class TestApi:
     @allure.title('Проверка редактирования сущности')
     def test_edit_entity(
         self,
-        created_entity_id,
-        teardown_entity,
+        setup_and_teardown_entity,
         logger
     ):
         api_client = ApiClient(logger=logger)
-        api_client.patch_entity(DataHelper.entity_setup_data(), created_entity_id)
-        teardown_entity['id'] = created_entity_id
+        api_client.patch_entity(
+            DataHelper.entity_setup_data(),
+            setup_and_teardown_entity
+        )
         AssertionHelper.check_patched_entity_title(
-            created_entity_id,
+            setup_and_teardown_entity,
             api_client.logger
         )
 
