@@ -37,12 +37,6 @@ jobs:
         docker-compose up -d
         sleep 10
 
-    - name: Wait for server
-      run: |
-        until curl -s http://localhost:8080/health; do
-          sleep 1
-        done
-
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
