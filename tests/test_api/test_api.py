@@ -1,4 +1,5 @@
 import allure
+import pytest
 
 from api_client.api_client import ApiClient
 from helpers.api_helpers import ValidationHelper, AssertionHelper
@@ -21,9 +22,10 @@ class TestApi:
             api_client.logger
         )
 
+    @pytest.mark.parametrize("setup_and_teardown_entities", [3], indirect=True)
     @allure.story('Получение списка сущностей')
     @allure.title('Проверка получения списка сущностей')
-    def test_get_entity_list(self, logger):
+    def test_get_entity_list(self, setup_and_teardown_entity, logger):
         api_client = ApiClient(logger=logger)
         api_client.get_entity_list()
         ValidationHelper.validate_response_schema(
