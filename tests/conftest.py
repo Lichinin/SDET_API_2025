@@ -57,3 +57,14 @@ def teardown_entity(logger):
     if entity_holder['id'] is not None:
         api_client = ApiClient(logger=logger)
         api_client.delete_entity(entity_holder['id'])
+
+
+@pytest.fixture
+def setup_and_teardown_entity(logger):
+    api_client = ApiClient(logger=logger)
+    api_client.create_entity(DataHelper.entity_setup_data())
+    entity_id = api_client.response_data
+
+    yield entity_id
+
+    api_client.delete_entity(entity_id)

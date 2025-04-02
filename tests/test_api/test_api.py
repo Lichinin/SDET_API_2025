@@ -12,10 +12,9 @@ class TestApi:
 
     @allure.story('Получение сущности')
     @allure.title('Проверка получения сущности по ID')
-    def test_get_entity(self, created_entity_id, teardown_entity, logger):
+    def test_get_entity(self, setup_and_teardown_entity, logger):
         api_client = ApiClient(logger=logger)
-        api_client.get_entity_by_id(created_entity_id)
-        teardown_entity['id'] = created_entity_id
+        api_client.get_entity_by_id(setup_and_teardown_entity)
         ValidationHelper.validate_response_schema(
             EntityModel,
             api_client.response_data,
