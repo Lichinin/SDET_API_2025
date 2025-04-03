@@ -9,29 +9,29 @@ class ApiClient(BaseApiClient):
         self.logger = logger
 
     @allure.step('Получить сущность по ID')
-    def get_entity_by_id(self, id):
-        url = APiRoutes.entity_by_id_url(id)
+    def get_entity_by_id(self, entity_id):
+        url = f'{APiRoutes.BASE_URL}{APiRoutes.API_VER}/get/{entity_id}'
         self._get(url)
 
     @allure.step('Получить список всех сущностей')
     def get_entity_list(self):
-        url = APiRoutes.entity_list_url()
+        url = f'{APiRoutes.BASE_URL}{APiRoutes.API_VER}/getALL'
         self._get(url)
 
     @allure.step('Создать новую сущность')
     def create_entity(self, entity_data):
-        url = APiRoutes.create_entity_url()
+        url = f'{APiRoutes.BASE_URL}{APiRoutes.API_VER}/create'
         self._post(url, json=entity_data)
 
     @allure.step('Редактировать сущность по ID')
     def patch_entity(self, entity_data, entity_id):
-        url = APiRoutes.patch_entity_url(entity_id)
+        url = f'{APiRoutes.BASE_URL}{APiRoutes.API_VER}/patch/{entity_id}'
         entity_data['title'] = f'EDITED_{entity_data["title"]}'
         self._patch(url, json=entity_data)
 
     @allure.step('Удалить сущность по ID')
     def delete_entity(self, entity_id):
-        url = APiRoutes.delete_entity_url(entity_id)
+        url = f'{APiRoutes.BASE_URL}{APiRoutes.API_VER}/delete/{entity_id}'
         self._delete(url)
 
     @allure.step('Получить список ID всех сущностей')
