@@ -13,19 +13,19 @@ class TestApi:
 
     @allure.story('Получение сущности')
     @allure.title('Проверка получения сущности по ID')
-    def test_get_entity(self, setup_and_teardown_entity, logger):
+    def test_get_entity(self, new_entity, logger):
         api_client = ApiClient(logger=logger)
-        api_client.get_entity_by_id(setup_and_teardown_entity)
+        api_client.get_entity_by_id(new_entity)
         ValidationHelper.validate_via_pydantic(
             EntityModel,
             api_client.response_data,
             api_client.logger
         )
 
-    @pytest.mark.parametrize("setup_and_teardown_entity", [3], indirect=True)
+    @pytest.mark.parametrize("new_entity", [3], indirect=True)
     @allure.story('Получение списка сущностей')
     @allure.title('Проверка получения списка сущностей')
-    def test_get_entity_list(self, setup_and_teardown_entity, logger):
+    def test_get_entity_list(self, new_entity, logger):
         api_client = ApiClient(logger=logger)
         api_client.get_entity_list()
         ValidationHelper.validate_via_pydantic(
@@ -55,7 +55,7 @@ class TestApi:
     @allure.title('Проверка редактирования сущности')
     def test_edit_entity(
         self,
-        setup_and_teardown_entity,
+        new_entity,
         logger
     ):
         api_client = ApiClient(logger=logger)
@@ -63,10 +63,10 @@ class TestApi:
         original_title = entity_data['title']
         api_client.patch_entity(
             entity_data,
-            setup_and_teardown_entity
+            new_entity
         )
         AssertionHelper.check_patched_entity_title(
-            setup_and_teardown_entity,
+            new_entity,
             original_title,
             api_client.logger
         )

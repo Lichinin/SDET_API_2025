@@ -60,7 +60,7 @@ def teardown_entity(logger):
 
 
 @pytest.fixture
-def setup_and_teardown_entity(logger, request):
+def new_entity(logger, request):
     api_client = ApiClient(logger=logger)
     entities_id = []
     num_entities = request.param if hasattr(request, "param") else 1
