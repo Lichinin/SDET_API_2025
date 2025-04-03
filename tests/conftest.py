@@ -2,13 +2,10 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 import pytest
-from faker import Faker
 
 from api_client.api_client import ApiClient
 from config import Pathes
 from helpers.data_helpers import DataHelper
-
-fake = Faker()
 
 
 @pytest.fixture(autouse=True)
