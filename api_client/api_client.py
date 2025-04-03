@@ -1,12 +1,10 @@
 import allure
 
-from config import APiRoutes
 from api_client.base_api_client import BaseApiClient
+from config import APiRoutes
 
 
 class ApiClient(BaseApiClient):
-    def __init__(self, logger):
-        self.logger = logger
 
     @allure.step('Получить сущность по ID')
     def get_entity_by_id(self, entity_id):
@@ -37,4 +35,4 @@ class ApiClient(BaseApiClient):
     @allure.step('Получить список ID всех сущностей')
     def get_entities_id_list(self):
         self.get_entity_list()
-        return [item["id"] for item in self.response_data["entity"]]
+        return [item['id'] for item in self.response_data['entity']]

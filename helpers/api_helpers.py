@@ -1,3 +1,5 @@
+import logging
+
 import allure
 
 from api_client.api_client import ApiClient
@@ -7,19 +9,20 @@ class ValidationHelper:
 
     @staticmethod
     @allure.step('Проверить схему JSON-ответа')
-    def validate_via_pydantic(model, response_data, logger):
+    def validate_via_pydantic(model, response_data):
+        logger = logging.getLogger(f'validation.{model.__name__}')
         logger.info('* Check response scheme')
         try:
             if isinstance(response_data, dict):
                 model(**response_data)
             else:
                 model(response_data)
-            logger.info(response_data)
+            logger.info(f'entity data: {response_data}')
+            logger.info('* Scheme is valid.')
         except Exception as e:
-            error_msg = f"Validation error: {str(e)}"
+            error_msg = f'Validation error: {str(e)}'
             logger.error(error_msg)
             raise AssertionError(error_msg)
-        logger.info(response_data)
 
 
 class AssertionHelper:
@@ -30,7 +33,7 @@ class AssertionHelper:
         assert entity_id not in entities_list
 
     @allure.step('Проверить изменение title сущности')
-    def check_patched_entity_title(entity_id, original_title, logger):
-        api_client = ApiClient(logger=logger)
+    def check_patched_entity_title(entity_id, original_title):
+        api_client = ApiClient()
         api_client.get_entity_by_id(entity_id)
         assert api_client.response_data['title'] == f'EDITED_{original_title}'

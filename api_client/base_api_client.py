@@ -1,16 +1,19 @@
+import logging
+
 import allure
 import requests
 from requests.exceptions import RequestException
 
 
 class BaseApiClient:
-    def __init__(self, logger):
-        self.logger = logger
+    def __init__(self):
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.response = None
         self.response_data = None
 
     def _make_request(self, method, url, headers=None, json=None):
         try:
+            self.logger.info(f'Send {method} request to {url}')
             self.response = requests.request(
                 method=method,
                 url=url,
@@ -28,20 +31,16 @@ class BaseApiClient:
             )
 
     def _get(self, url):
-        self.logger.info(f'Send GET to {url}')
         return self._make_request('GET', url)
 
     def _post(self, url, json):
-        self.logger.info(f'Send POST to {url}')
         headers = {"Content-Type": "application/json"}
         return self._make_request('POST', url, headers=headers, json=json)
 
     def _patch(self, url, json):
-        self.logger.info(f'Send PATCH to {url}')
         headers = {"Content-Type": "application/json"}
         return self._make_request('PATCH', url, headers=headers, json=json)
 
     def _delete(self, url):
-        self.logger.info(f'Send DELETE to {url}')
         headers = {"Content-Type": "text/plain"}
         return self._make_request('DELETE', url, headers=headers)
