@@ -35,7 +35,7 @@ jobs:
       run: |
         cd server
         docker-compose up -d
-        timeout 60 bash -c 'until docker-compose ps service | grep -q "Up (healthy\|running)"; do sleep 2; done'
+        timeout 60 bash -c 'until docker-compose ps --services --status running | grep -q "^service$"; do sleep 2; done'
 
     - name: Set up Python
       uses: actions/setup-python@v4
