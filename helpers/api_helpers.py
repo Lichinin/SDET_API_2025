@@ -30,7 +30,7 @@ class AssertionHelper:
         assert entity_id not in entities_list
 
     @allure.step('Проверить изменение title сущности')
-    def check_patched_entity_title(entity_id, logger):
+    def check_patched_entity_title(entity_id, original_title, logger):
         api_client = ApiClient(logger=logger)
         api_client.get_entity_by_id(entity_id)
-        assert api_client.response_data['title'].startswith('EDITED_')
+        assert api_client.response_data['title'] == f'EDITED_{original_title}'

@@ -59,12 +59,15 @@ class TestApi:
         logger
     ):
         api_client = ApiClient(logger=logger)
+        entity_data = DataHelper.entity_setup_data()
+        original_title = entity_data['title']
         api_client.patch_entity(
-            DataHelper.entity_setup_data(),
+            entity_data,
             setup_and_teardown_entity
         )
         AssertionHelper.check_patched_entity_title(
             setup_and_teardown_entity,
+            original_title,
             api_client.logger
         )
 
