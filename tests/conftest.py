@@ -56,8 +56,7 @@ def teardown_entity(logger):
 
     if entity_holders:
         api_client = ApiClient(logger=logger)
-        for entity_id in entity_holders:
-            api_client.delete_entity(entity_id)
+        api_client.delete_entity(entity_holders[0])
 
 
 @pytest.fixture
