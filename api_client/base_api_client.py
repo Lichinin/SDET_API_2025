@@ -6,20 +6,21 @@ from requests.exceptions import RequestException
 class BaseApiClient:
     def __init__(self, logger):
         self.logger = logger
+        self.response = None
         self.response_data = None
 
     def _make_request(self, method, url, headers=None, json=None):
         try:
-            response = requests.request(
+            self.response = requests.request(
                 method=method,
                 url=url,
                 headers=headers,
                 json=json
             )
-            response.raise_for_status()
-            if response.status_code != 204:
-                self.response_data = response.json()
-            return response
+            self.response.raise_for_status()
+            if self.response.status_code != 204:
+                self.response_data = self.response.json()
+            return self.response
         except RequestException:
             self.logger.error(f'Failed {method} request to {url} ')
             raise Exception(
