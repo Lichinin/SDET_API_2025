@@ -50,13 +50,14 @@ def created_entity_id(logger):
 
 @pytest.fixture
 def teardown_entity(logger):
-    entity_holder = {'id': None}
+    entity_holders = []
 
-    yield entity_holder
+    yield entity_holders
 
-    if entity_holder['id'] is not None:
+    if entity_holders:
         api_client = ApiClient(logger=logger)
-        api_client.delete_entity(entity_holder['id'])
+        for entity_id in entity_holders:
+            api_client.delete_entity(entity_id)
 
 
 @pytest.fixture

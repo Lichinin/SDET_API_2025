@@ -43,7 +43,7 @@ class TestApi:
     ):
         api_client = ApiClient(logger=logger)
         api_client.create_entity(DataHelper.entity_setup_data())
-        teardown_entity['id'] = api_client.response_data
+        teardown_entity.append(api_client.response_data)
         ValidationHelper.validate_via_pydantic(
             EntityCreateModel,
             api_client.response_data,

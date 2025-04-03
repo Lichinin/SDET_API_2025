@@ -3,7 +3,7 @@ from faker import Faker
 fake = Faker()
 
 
-class DataHelper():
+class DataHelper:
 
     @staticmethod
     def entity_setup_data():
