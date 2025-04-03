@@ -16,7 +16,7 @@ class TestApi:
     def test_get_entity(self, setup_and_teardown_entity, logger):
         api_client = ApiClient(logger=logger)
         api_client.get_entity_by_id(setup_and_teardown_entity)
-        ValidationHelper.validate_response_schema(
+        ValidationHelper.validate_via_pydantic(
             EntityModel,
             api_client.response_data,
             api_client.logger
@@ -28,7 +28,7 @@ class TestApi:
     def test_get_entity_list(self, setup_and_teardown_entity, logger):
         api_client = ApiClient(logger=logger)
         api_client.get_entity_list()
-        ValidationHelper.validate_response_schema(
+        ValidationHelper.validate_via_pydantic(
             EntityListModel,
             api_client.response_data,
             api_client.logger
@@ -44,7 +44,7 @@ class TestApi:
         api_client = ApiClient(logger=logger)
         api_client.create_entity(DataHelper.entity_setup_data())
         teardown_entity['id'] = api_client.response_data
-        ValidationHelper.validate_response_schema(
+        ValidationHelper.validate_via_pydantic(
             EntityCreateModel,
             api_client.response_data,
             api_client.logger

@@ -7,7 +7,7 @@ class ValidationHelper:
 
     @staticmethod
     @allure.step('Проверить схему JSON-ответа')
-    def validate_response_schema(model, response_data, logger):
+    def validate_via_pydantic(model, response_data, logger):
         logger.info('* Check response scheme')
         try:
             if isinstance(response_data, dict):
