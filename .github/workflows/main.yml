@@ -16,13 +16,26 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Checkout server code
+      uses: actions/checkout@v4
+      with:
+        repository: Lichinin/simbirsoft_sdet_project_api_server
+        path: server 
+
     - name: Set up Docker
       uses: docker/setup-buildx-action@v3
       
-    - name: Start server container
+    - name: Install Docker Compose
       run: |
-        docker run -d -p 8080:8080 --name api_server lichinin/simbirsoft_sdet_project_api_server
-        timeout 60 bash -c 'until curl -s http://localhost:8080 >/dev/null; do sleep 2; done'
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+
+    - name: Start server with Docker Compose
+      run: |
+        cd server
+        docker-compose up -d
+        timeout 60 bash -c 'until docker-compose ps --services --status running | grep -q "^service$"; do sleep 2; done'
 
     - name: Set up Python
       uses: actions/setup-python@v4
