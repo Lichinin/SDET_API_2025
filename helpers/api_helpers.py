@@ -33,6 +33,7 @@ class AssertionHelper:
         assert entity_id not in entities_list, \
             f'Deleted entity(ID={entity_id} in entities list)'
 
+    @staticmethod
     @allure.step('Проверить изменение title сущности')
     def check_patched_entity_title(entity_id, original_title):
         api_client = ApiClient()
