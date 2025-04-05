@@ -30,10 +30,12 @@ class AssertionHelper:
     @staticmethod
     @allure.step('Проверить отсутствие удаленной сущности')
     def check_delited_entity(entity_id, entities_list):
-        assert entity_id not in entities_list
+        assert entity_id not in entities_list, \
+            f'Deleted entity(ID={entity_id} in entities list)'
 
     @allure.step('Проверить изменение title сущности')
     def check_patched_entity_title(entity_id, original_title):
         api_client = ApiClient()
         api_client.get_entity_by_id(entity_id)
-        assert api_client.response_data['title'] == f'EDITED_{original_title}'
+        assert api_client.response_data['title'] == f'EDITED_{original_title}', \
+            f'Edited title must be "EDITED_{original_title}"'
