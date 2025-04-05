@@ -64,8 +64,9 @@ def teardown_entity(request):
 
     if entity_holders:
         api_client = ApiClient()
-        logger.info('====> Fixture: Delete entity for test')
-        api_client.delete_entity(entity_holders[0])
+        for entity in entity_holders:
+            logger.info('====> Fixture: Delete entity for test')
+            api_client.delete_entity(entity)
 
 
 @pytest.fixture
