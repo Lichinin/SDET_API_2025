@@ -1,5 +1,7 @@
 allure-pytest==2.13.5
 Faker==37.1.0
+flake8==7.2.0
+pre_commit==4.2.0
 pydantic==2.11.1
 pytest==8.3.5
 pytest-xdist==3.6.1
