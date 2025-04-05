@@ -36,7 +36,16 @@ class AssertionHelper:
     @staticmethod
     @allure.step('Проверить изменение title сущности')
     def check_patched_entity_title(entity_id, original_title):
+        logger = logging.getLogger(f'validation.{__name__}')
         api_client = ApiClient()
         response = api_client.get_entity_by_id(entity_id)
+        logger.info(f'assert {response.json()["title"]} and EDITED_{original_title}')
         assert response.json()['title'] == f'EDITED_{original_title}', \
             f'Edited title must be "EDITED_{original_title}"'
+
+    @staticmethod
+    @allure.step('Получить title сущности')
+    def get_entity_title(entity_id):
+        api_client = ApiClient()
+        response = api_client.get_entity_by_id(entity_id)
+        return response .json()['title']

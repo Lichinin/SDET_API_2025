@@ -15,7 +15,7 @@ class TestApi:
     @allure.title('Проверка получения сущности по ID')
     def test_get_entity(self, new_entity):
         api_client = ApiClient()
-        response = api_client.get_entity_by_id(new_entity)
+        response = api_client.get_entity_by_id(new_entity['id'])
         assert response.status_code == 200, \
             f'Excepted status code 200, got {response.status_code}'
         ValidationHelper.validate_via_pydantic(
@@ -64,14 +64,12 @@ class TestApi:
         original_title = entity_data['title']
         response = api_client.patch_entity(
             entity_data,
-            new_entity
+            new_entity['id']
         )
         assert response.status_code == 204, \
             f'Excepted status code 204, got {response.status_code}'
-        AssertionHelper.check_patched_entity_title(
-            new_entity,
-            original_title,
-        )
+        assert AssertionHelper.get_entity_title(new_entity['id']) == f'EDITED_{original_title}', \
+            f'New entity title  must be "EDITED_{original_title}'
 
     @allure.story('Удаление сущности')
     @allure.title('Проверка удаления сущности')

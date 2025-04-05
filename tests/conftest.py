@@ -74,17 +74,18 @@ def new_entity(request):
     logger = logging.getLogger(f'fixture.{request.node.name}')
     logger.info('====> Fixture setup started')
     api_client = ApiClient()
-    entities_id = []
+    entities_list = []
     num_entities = request.param if hasattr(request, 'param') else 1
     for _ in range(num_entities):
         logger.info('====> Fixture: Try create entity for test')
         response = api_client.create_entity(DataHelper.entity_setup_data())
-        logger.info(f'====> Fixture: Successful create entity (id={response.json()}) for test.')
-        entities_id.append(response.json())
+        created_entity_id = response.json()
+        logger.info(f'====> Fixture: Successful create entity (id={created_entity_id}) for test.')
+        entities_list.append(api_client.get_entity_by_id(created_entity_id).json())
 
-    yield entities_id[0] if num_entities == 1 else entities_id
+    yield entities_list[0] if num_entities == 1 else entities_list
 
-    for entity_id in entities_id:
-        logger.info(f'====> Fixture: Delete entity (id={entity_id}) for test')
-        api_client.delete_entity(entity_id)
+    for entity in entities_list:
+        logger.info(f'====> Fixture: Delete entity (id={entity["id"]}) for test')
+        api_client.delete_entity(entity['id'])
     logger.info('====> Fixture setup exit')
