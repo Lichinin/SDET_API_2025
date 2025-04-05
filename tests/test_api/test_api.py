@@ -22,6 +22,8 @@ class TestApi:
             EntityModel,
             response.json(),
         )
+        assert new_entity == response.json(), \
+            'Значения полей новой сущности не равны передаваемым значениям полей'
 
     @pytest.mark.parametrize('new_entity', [3], indirect=True)
     @allure.story('Получение списка сущностей')
@@ -35,6 +37,7 @@ class TestApi:
             EntityListModel,
             response.json(),
         )
+        AssertionHelper.check_getting_created_enity_data(new_entity, response.json()['entity'])
 
     @allure.story('Создание сущности')
     @allure.title('Проверка создания новой сущности')

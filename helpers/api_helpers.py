@@ -34,18 +34,15 @@ class AssertionHelper:
             f'Deleted entity(ID={entity_id} in entities list)'
 
     @staticmethod
-    @allure.step('Проверить изменение title сущности')
-    def check_patched_entity_title(entity_id, original_title):
-        logger = logging.getLogger(f'validation.{__name__}')
-        api_client = ApiClient()
-        response = api_client.get_entity_by_id(entity_id)
-        logger.info(f'assert {response.json()["title"]} and EDITED_{original_title}')
-        assert response.json()['title'] == f'EDITED_{original_title}', \
-            f'Edited title must be "EDITED_{original_title}"'
-
-    @staticmethod
     @allure.step('Получить title сущности')
     def get_entity_title(entity_id):
         api_client = ApiClient()
         response = api_client.get_entity_by_id(entity_id)
         return response .json()['title']
+
+    @staticmethod
+    @allure.step('Получить title сущности')
+    def check_getting_created_enity_data(created_entity, list_of_all_etities):
+        for entity in created_entity:
+            assert entity in list_of_all_etities, \
+                'Созданная сущность отсутствует в списке всех сущностей'
