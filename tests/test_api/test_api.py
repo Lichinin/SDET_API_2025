@@ -15,12 +15,12 @@ class TestApi:
     @allure.title('Проверка получения сущности по ID')
     def test_get_entity(self, new_entity):
         api_client = ApiClient()
-        api_client.get_entity_by_id(new_entity)
-        assert api_client.response.status_code == 200, \
-            f'Excepted status code 200, got {api_client.response.status_code}'
+        response = api_client.get_entity_by_id(new_entity)
+        assert response.status_code == 200, \
+            f'Excepted status code 200, got {response.status_code}'
         ValidationHelper.validate_via_pydantic(
             EntityModel,
-            api_client.response_data,
+            response.json(),
         )
 
     @pytest.mark.parametrize('new_entity', [3], indirect=True)
@@ -28,12 +28,12 @@ class TestApi:
     @allure.title('Проверка получения списка сущностей')
     def test_get_entity_list(self, new_entity):
         api_client = ApiClient()
-        api_client.get_entity_list()
-        assert api_client.response.status_code == 200, \
-            f'Excepted status code 200, got {api_client.response.status_code}'
+        response = api_client.get_entity_list()
+        assert response.status_code == 200, \
+            f'Excepted status code 200, got {response.status_code}'
         ValidationHelper.validate_via_pydantic(
             EntityListModel,
-            api_client.response_data,
+            response.json(),
         )
 
     @allure.story('Создание сущности')
@@ -43,15 +43,15 @@ class TestApi:
         teardown_entity
     ):
         api_client = ApiClient()
-        api_client.create_entity(DataHelper.entity_setup_data())
-        teardown_entity.append(api_client.response_data)
-        assert api_client.response.status_code == 200, \
-            f'Excepted status code 200, got {api_client.response.status_code}'
+        response = api_client.create_entity(DataHelper.entity_setup_data())
+        teardown_entity.append(response.json())
+        assert response.status_code == 200, \
+            f'Excepted status code 200, got {response.status_code}'
         ValidationHelper.validate_via_pydantic(
             EntityCreateModel,
-            api_client.response_data,
+            response.json()
         )
-        assert api_client.response_data in api_client.get_entities_id_list()
+        assert response.json() in api_client.get_entities_id_list()
 
     @allure.story('Редактирование сущности')
     @allure.title('Проверка редактирования сущности')
@@ -62,12 +62,12 @@ class TestApi:
         api_client = ApiClient()
         entity_data = DataHelper.entity_setup_data()
         original_title = entity_data['title']
-        api_client.patch_entity(
+        response = api_client.patch_entity(
             entity_data,
             new_entity
         )
-        assert api_client.response.status_code == 204, \
-            f'Excepted status code 204, got {api_client.response.status_code}'
+        assert response.status_code == 204, \
+            f'Excepted status code 204, got {response.status_code}'
         AssertionHelper.check_patched_entity_title(
             new_entity,
             original_title,
@@ -80,9 +80,9 @@ class TestApi:
         created_entity_id,
     ):
         api_client = ApiClient()
-        api_client.delete_entity(created_entity_id)
-        assert api_client.response.status_code == 204, \
-            f'Excepted status code 204, got {api_client.response.status_code}'
+        response = api_client.delete_entity(created_entity_id)
+        assert response.status_code == 204, \
+            f'Excepted status code 204, got {response.status_code}'
         AssertionHelper.check_delited_entity(
             created_entity_id,
             api_client.get_entities_id_list()

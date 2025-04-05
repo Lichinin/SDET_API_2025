@@ -1,6 +1,5 @@
 import logging
 
-import allure
 import requests
 from requests.exceptions import RequestException
 
@@ -8,22 +7,18 @@ from requests.exceptions import RequestException
 class BaseApiClient:
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)
-        self.response = None
-        self.response_data = None
 
     def _make_request(self, method, url, headers=None, json=None):
         try:
             self.logger.info(f'Send {method} request to {url}')
-            self.response = requests.request(
+            response = requests.request(
                 method=method,
                 url=url,
                 headers=headers,
                 json=json
             )
-            self.response.raise_for_status()
-            if self.response.status_code != 204:
-                self.response_data = self.response.json()
-            return self.response
+            response.raise_for_status()
+            return response
         except RequestException:
             self.logger.error(f'Failed {method} request to {url} ')
             raise Exception(
