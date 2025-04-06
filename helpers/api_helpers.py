@@ -9,7 +9,10 @@ class ValidationHelper:
 
     @staticmethod
     @allure.step('Проверить схему JSON-ответа')
-    def validate_via_pydantic(model, response_data):
+    def validate_via_pydantic(
+        model: type,
+        response_data: dict | list[dict]
+    ) -> None:
         logger = logging.getLogger(f'validation.{model.__name__}')
         logger.info('* Check response scheme')
         try:
@@ -29,20 +32,26 @@ class AssertionHelper:
 
     @staticmethod
     @allure.step('Проверить отсутствие удаленной сущности')
-    def check_delited_entity(entity_id, entities_list):
+    def check_delited_entity(
+        entity_id: int,
+        entities_list: list[int]
+    ) -> None:
         assert entity_id not in entities_list, \
             f'Deleted entity(ID={entity_id} in entities list)'
 
     @staticmethod
     @allure.step('Получить title сущности')
-    def get_entity_title(entity_id):
+    def get_entity_title(entity_id: int) -> str:
         api_client = ApiClient()
         response = api_client.get_entity_by_id(entity_id)
         return response .json()['title']
 
     @staticmethod
     @allure.step('Получить title сущности')
-    def check_getting_created_enity_data(created_entity, list_of_all_etities):
+    def check_getting_created_enity_data(
+        created_entity: dict | list[dict],
+        list_of_all_etities: list[dict]
+    ) -> None:
         for entity in created_entity:
             assert entity in list_of_all_etities, \
                 'Созданная сущность отсутствует в списке всех сущностей'

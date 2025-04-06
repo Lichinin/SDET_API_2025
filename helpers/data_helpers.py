@@ -1,3 +1,4 @@
+import allure
 from faker import Faker
 
 fake = Faker()
@@ -6,7 +7,8 @@ fake = Faker()
 class DataHelper:
 
     @staticmethod
-    def entity_setup_data():
+    @allure.step('Сформировать значения полей новой сущности')
+    def entity_setup_data() -> dict:
         return {
             "addition": {
                 "additional_info": fake.sentence(),
