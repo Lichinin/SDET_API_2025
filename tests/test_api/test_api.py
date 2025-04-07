@@ -58,10 +58,10 @@ class TestApi:
                 EntityCreateModel,
                 response.json()
             )
-        with allure.step('Проверить, что созданная сущность присутствует в списке всех сущностей'):
-            assert response.json() in api_client.get_entities_id_list(), (
-                f'В списке всех сущностей ({api_client.get_entities_id_list()}) '
-                f'отсутствует созданная сущность (ID={response.json()})'
+        with allure.step('Проверить, что созданная сущность существует в базе данных'):
+            AssertionHelper.check_status_code(
+                api_client.get_entity_by_id(response.json()).status_code,
+                200
             )
 
     @allure.story('Редактирование сущности')
