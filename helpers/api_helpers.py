@@ -50,11 +50,15 @@ class AssertionHelper:
     @allure.step('Получить title сущности')
     def check_getting_created_entity_data(
         created_entity: dict | list[dict],
-        list_of_all_entities: list[dict]
+        entities: dict | list[dict]
     ) -> None:
-        for entity in created_entity:
-            assert entity in list_of_all_entities, \
-                'Созданная сущность отсутствует в списке всех сущностей'
+        if isinstance(created_entity, list) and isinstance(entities, list):
+            for entity in created_entity:
+                assert entity in entities, \
+                    'Созданная сущность отсутствует в списке всех сущностей. Получение всех сущностей некорректно'
+        elif isinstance(created_entity, dict) and isinstance(entities, dict):
+            assert created_entity == entities, \
+                'Созданная сущность не соответствует полученной'
 
     @staticmethod
     @allure.step('Проверить статус-код ответа')
