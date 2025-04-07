@@ -40,12 +40,10 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
-    - name: Pull Docker image
-      run: docker pull lichinin/simbirsoft_api:latest
-
     - name: Start services
-      working-directory: ./server
       run: |
+        docker pull lichinin/simbirsoft_api:latest
+        
         docker-compose up -d
         docker-compose run migrate \
           -path /migrations \
