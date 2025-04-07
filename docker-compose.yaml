@@ -12,20 +12,6 @@ services:
         condition: service_healthy
 
 
-  postgres: 
-    image: postgres:15.2
-    environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: test
-    ports:
-     - "5432:5432"
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "test", "-U", "test" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
   migrate:
     image: migrate/migrate
     volumes:
