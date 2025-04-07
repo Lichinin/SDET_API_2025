@@ -88,7 +88,7 @@ class TestApi:
                 f'Excepted status code 204, got {response.status_code}'
         with allure.step('Проверить, что "title" сущности соответствует измененному значению'):
             assert AssertionHelper.get_entity_title(new_entity['id']) == f'EDITED_{original_title}', (
-                f'Измененный "title" сущности должен быть равен "EDITED_{original_title}'
+                f'Измененный "title" сущности должен быть равен "EDITED_{original_title}"'
             )
 
     @allure.story('Удаление сущности')

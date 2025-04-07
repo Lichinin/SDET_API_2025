@@ -44,7 +44,7 @@ class AssertionHelper:
     def get_entity_title(entity_id: int) -> str:
         api_client = ApiClient()
         response = api_client.get_entity_by_id(entity_id)
-        return response .json()['title']
+        return response.json()['title']
 
     @staticmethod
     @allure.step('Получить title сущности')
