@@ -12,15 +12,24 @@ jobs:
   test:
     runs-on: ubuntu-latest
     
+    services:
+      postgres:
+        image: postgres:15.2
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd "pg_isready -q -d test -U test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Checkout server code
-      uses: actions/checkout@v4
-      with:
-        repository: Lichinin/simbirsoft_sdet_project_api_server
-        path: server 
 
     - name: Set up Docker
       uses: docker/setup-buildx-action@v3
@@ -31,11 +40,14 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
-    - name: Start server with Docker Compose
+    - name: Start services
       run: |
-        cd server
+        docker pull lichinin/simbirsoft_api:latest
         docker-compose up -d
-        timeout 60 bash -c 'until docker-compose ps --services --status running | grep -q "^service$"; do sleep 2; done'
+        docker-compose run migrate \
+          -path /migrations \
+          -database "postgres://test:test@postgres:5432/test?sslmode=disable" \
+          up 3
 
     - name: Set up Python
       uses: actions/setup-python@v4
