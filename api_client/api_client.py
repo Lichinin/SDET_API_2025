@@ -25,7 +25,6 @@ class ApiClient(BaseApiClient):
     @allure.step('Редактировать сущность по ID')
     def patch_entity(self, entity_data: dict, entity_id: int) -> requests.Response:
         url = f'{APiRoutes.BASE_URL}{APiRoutes.API_VER}/patch/{entity_id}'
-        entity_data['title'] = f'EDITED_{entity_data["title"]}'
         return self._patch(url, json=entity_data)
 
     @allure.step('Удалить сущность по ID')

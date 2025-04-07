@@ -73,6 +73,7 @@ class TestApi:
         api_client = ApiClient()
         entity_data = DataHelper.entity_setup_data()
         original_title = entity_data['title']
+        entity_data['title'] = f'EDITED_{entity_data["title"]}'
         response = api_client.patch_entity(
             entity_data,
             new_entity['id']
