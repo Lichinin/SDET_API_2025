@@ -16,9 +16,7 @@ class TestApi:
     def test_get_entity(self, new_entity):
         api_client = ApiClient()
         response = api_client.get_entity_by_id(new_entity['id'])
-        with allure.step('Проверить статус-кода ответа'):
-            assert response.status_code == 200, \
-                f'Excepted status code 200, got {response.status_code}'
+        AssertionHelper.check_status_code(response.status_code, 200)
         with allure.step('Проверить схему ответа с помощью pydantic'):
             ValidationHelper.validate_via_pydantic(
                 EntityModel,
@@ -36,9 +34,7 @@ class TestApi:
     def test_get_entity_list(self, new_entity):
         api_client = ApiClient()
         response = api_client.get_entity_list()
-        with allure.step('Проверить статус-кода ответа'):
-            assert response.status_code == 200, \
-                f'Excepted status code 200, got {response.status_code}'
+        AssertionHelper.check_status_code(response.status_code, 200)
         with allure.step('Проверить схему ответа с помощью pydantic'):
             ValidationHelper.validate_via_pydantic(
                 EntityListModel,
@@ -56,9 +52,7 @@ class TestApi:
         api_client = ApiClient()
         response = api_client.create_entity(DataHelper.entity_setup_data())
         teardown_entity.append(response.json())
-        with allure.step('Проверить статус-кода ответа'):
-            assert response.status_code == 200, \
-                f'Excepted status code 200, got {response.status_code}'
+        AssertionHelper.check_status_code(response.status_code, 200)
         with allure.step('Проверить схему ответа с помощью pydantic'):
             ValidationHelper.validate_via_pydantic(
                 EntityCreateModel,
@@ -83,9 +77,7 @@ class TestApi:
             entity_data,
             new_entity['id']
         )
-        with allure.step('Проверить статус-кода ответа'):
-            assert response.status_code == 204, \
-                f'Excepted status code 204, got {response.status_code}'
+        AssertionHelper.check_status_code(response.status_code, 204)
         with allure.step('Проверить, что "title" сущности соответствует измененному значению'):
             assert AssertionHelper.get_entity_title(new_entity['id']) == f'EDITED_{original_title}', (
                 f'Измененный "title" сущности должен быть равен "EDITED_{original_title}"'
@@ -99,9 +91,7 @@ class TestApi:
     ):
         api_client = ApiClient()
         response = api_client.delete_entity(created_entity_id)
-        with allure.step('Проверить статус-кода ответа'):
-            assert response.status_code == 204, \
-                f'Excepted status code 204, got {response.status_code}'
+        AssertionHelper.check_status_code(response.status_code, 204)
         with allure.step('Проверить, удаленная сущность отсутствует в списке всех сущностей'):
             AssertionHelper.check_deleted_entity(
                 created_entity_id,
