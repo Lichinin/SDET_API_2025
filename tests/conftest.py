@@ -46,7 +46,7 @@ def configure_logging(request):
 
 @pytest.fixture
 def created_entity_id(request, api_client):
-    logger = logging.getLogger(f'fixture.{request.node.name}')
+    logger = logging.getLogger(f'fixture.{request.fixturename}')
     logger.info('====> Fixture setup started')
     logger.info('====> Fixture: Try create entity for test')
     response = api_client.create_entity(DataHelper.entity_setup_data())
@@ -56,7 +56,7 @@ def created_entity_id(request, api_client):
 
 @pytest.fixture
 def teardown_entity(request, api_client):
-    logger = logging.getLogger(f'fixture.{request.node.name}')
+    logger = logging.getLogger(f'fixture.{request.fixturename}')
     entity_holders = []
 
     yield entity_holders
@@ -69,7 +69,7 @@ def teardown_entity(request, api_client):
 
 @pytest.fixture
 def new_entity(request, api_client):
-    logger = logging.getLogger(f'fixture.{request.node.name}')
+    logger = logging.getLogger(f'fixture.{request.fixturename}')
     logger.info('====> Fixture setup started')
     entities_list = []
     num_entities = request.param if hasattr(request, 'param') else 1
@@ -90,7 +90,7 @@ def new_entity(request, api_client):
 
 @pytest.fixture(scope='function')
 def api_client(request):
-    logger = logging.getLogger(f'fixture.{request.node.name}')
+    logger = logging.getLogger(f'fixture.{request.fixturename}')
     logger.info('====> Fixture ApiClient started')
     client = ApiClient()
 
