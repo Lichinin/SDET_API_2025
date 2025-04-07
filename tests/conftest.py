@@ -4,7 +4,7 @@ from logging.handlers import RotatingFileHandler
 import pytest
 
 from api_client.api_client import ApiClient
-from config import Pathes
+from config import Paths
 from helpers.data_helpers import DataHelper
 
 
@@ -25,7 +25,7 @@ def configure_logging(request):
     console_handler.setFormatter(formatter)
     root_logger.addHandler(console_handler)
 
-    log_dir = Pathes.LOG_DIR
+    log_dir = Paths.LOG_DIR
     log_dir.mkdir(exist_ok=True)
 
     file_handler = RotatingFileHandler(

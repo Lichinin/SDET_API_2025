@@ -32,7 +32,7 @@ class AssertionHelper:
 
     @staticmethod
     @allure.step('Проверить отсутствие удаленной сущности')
-    def check_delited_entity(
+    def check_deleted_entity(
         entity_id: int,
         entities_list: list[int]
     ) -> None:
@@ -48,10 +48,10 @@ class AssertionHelper:
 
     @staticmethod
     @allure.step('Получить title сущности')
-    def check_getting_created_enity_data(
+    def check_getting_created_entity_data(
         created_entity: dict | list[dict],
-        list_of_all_etities: list[dict]
+        list_of_all_entities: list[dict]
     ) -> None:
         for entity in created_entity:
-            assert entity in list_of_all_etities, \
+            assert entity in list_of_all_entities, \
                 'Созданная сущность отсутствует в списке всех сущностей'

@@ -45,7 +45,7 @@ class TestApi:
                 response.json(),
             )
         with allure.step('Проверить, что созданные тестовые сущности есть в списке всех сущностей'):
-            AssertionHelper.check_getting_created_enity_data(new_entity, response.json()['entity'])
+            AssertionHelper.check_getting_created_entity_data(new_entity, response.json()['entity'])
 
     @allure.story('Создание сущности')
     @allure.title('Проверка создания новой сущности')
@@ -66,8 +66,8 @@ class TestApi:
             )
         with allure.step('Проверить, что созданная сущность присутствует в списке всех сущностей'):
             assert response.json() in api_client.get_entities_id_list(), (
-                f'В списке всех сущносте ({api_client.get_entities_id_list()}) '
-                f'отсутствует созданная сужность (ID={response.json()})'
+                f'В списке всех сущностей ({api_client.get_entities_id_list()}) '
+                f'отсутствует созданная сущность (ID={response.json()})'
             )
 
     @allure.story('Редактирование сущности')
@@ -103,7 +103,7 @@ class TestApi:
             assert response.status_code == 204, \
                 f'Excepted status code 204, got {response.status_code}'
         with allure.step('Проверить, удаленная сущность отсутствует в списке всех сущностей'):
-            AssertionHelper.check_delited_entity(
+            AssertionHelper.check_deleted_entity(
                 created_entity_id,
                 api_client.get_entities_id_list()
             )

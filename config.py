@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-class Pathes:
+class Paths:
     LOG_DIR = Path(__file__).parent / 'log'
 
 
