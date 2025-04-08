@@ -16,6 +16,7 @@ services:
 
   migrate:
     image: migrate/migrate
+    network_mode: host
     volumes:
       - ./migrations:/migrations
     command:
